@@ -1,0 +1,25 @@
+stage: task
+profile: standard
+gates:
+  office_hours: false
+  ceo_review: false
+  eng_review: false
+  design_review: false
+  brainstorm: false
+  polish: false
+  multi_agent: false
+execution:
+  qa_mode: validate_only
+frameworks:
+  openspec: null
+  gstack: null
+  compound_engineering: null
+  omx: null
+artifacts:
+  task: task.md
+  decisions: decisions.md
+  plan: plan.md
+  review: review.md
+  qa: qa.md
+  followups: followups.md
+updated: YYYY-MM-DD

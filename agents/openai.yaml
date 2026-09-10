@@ -1,0 +1,4 @@
+interface:
+  display_name: "Personal Flow"
+  short_description: "Run a task from discovery through QA and learning."
+  default_prompt: "Use $personal-flow to start and run this task."
