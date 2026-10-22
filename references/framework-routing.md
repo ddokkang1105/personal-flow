@@ -15,16 +15,16 @@
 | Plan or document review | CE doc review | `review.md` or `decisions.md` |
 | User-directed UX refinement | CE polish | repository changes + `review.md` |
 | Parallel independent work | OMX team/worktree runtime | integrated repository changes |
-| Report-only browser validation | gstack QA-only | `qa.md` |
-| Authorized browser test-fix-verify | gstack QA | fixes + `qa.md` |
+| Report-only validation (web, CLI, API, or other software) | gstack QA-only | `qa.md` |
+| Authorized test-fix-verify | gstack QA | fixes + `qa.md` |
 | Reusable learning | CE compound | `.flow/knowledge/learnings.md` or linked note |
 
 ## Availability and safety
 
-Run `scripts/probe-frameworks.ps1 -ProjectRoot <repo>` at task start. Its result is capability detection, not permission to launch another runtime or proof that a skill is loaded.
+Run `python3 scripts/probe-frameworks.py <repo>` at task start. Its result is capability detection, not permission to launch another runtime or proof that a skill is loaded.
 
-- OpenSpec: Codex normally exposes project skills named `openspec-*` under `.agents/skills`; other hosts may expose `/opsx:*`. Use the actual active integration. Keep OpenSpec to task/spec ownership in Personal Flow, track its change name, and reconcile it at close.
-- gstack: use the active skill matching the selected gate. `qa-only` is non-fixing report mode. `qa` fixes source and makes atomic commits, so use it only when that behavior is authorized.
+- OpenSpec: Codex normally exposes project skills named `openspec-*` under `.agents/skills`; other hosts may expose `/opsx:*`. Use the actual active integration. OPSX is action-based, not phase-locked: planning artifacts can be updated during implementation, while explore, verify, and sync are optional. Keep OpenSpec to task/spec ownership in Personal Flow, track its change name, and reconcile it at close.
+- gstack: use the active skill matching the selected gate. `qa-only` is report mode for browser and non-browser behavior (including CLI and API); it must not change product code or tests. `qa` reproduces bugs, writes regression tests, fixes source, re-verifies, and commits, so use it only when the user authorized that full loop. On Codex, verify the active generated skill is available before routing a gate to gstack.
 - CE: use active `ce-ideate`, `ce-brainstorm`, `ce-plan`, `ce-work`, `ce-code-review`, `ce-doc-review`, `ce-polish`, and `ce-compound` according to stage. Do not route to the retired generic `ce-review` name.
 - OMX: use only for independent workstreams. The current OMX surface includes independent skills such as `$team` and a separate autopilot chain; Personal Flow deliberately does not adopt autopilot or Ralph. Require explicit approval for the exact team/worktree launch. Native Windows and the Codex App are not OMX's recommended default runtime, so verify the environment before proposing a launch.
 - If a framework is detected but the matching skill is inactive, use a direct fallback and record it. Do not tell the user to restart unless reloading the skill is genuinely required for the requested gate.
