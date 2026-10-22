@@ -10,8 +10,8 @@ Use Personal Flow as a thin control plane. Keep the external frameworks independ
 ## Start or Resume
 
 1. Locate `.flow/`. If absent, copy `assets/templates/` into `.flow/templates/` and create `.flow/tasks/` and `.flow/knowledge/`.
-2. Run `scripts/probe-frameworks.ps1 -ProjectRoot <repo>` and read `references/framework-routing.md` before selecting optional gates. Record installed versions, the active skill or CLI actually used, and any fallback in the task artifacts. Detection alone is not activation.
-3. For a new task, run `scripts/new-task.ps1 -Title "<title>"` from the repository root, or create a slugged folder in `.flow/tasks/` and copy all task templates into it.
+2. Run `python3 scripts/probe-frameworks.py <repo>` and read `references/framework-routing.md` before selecting optional gates. Record installed versions, the active skill or CLI actually used, and any fallback in the task artifacts. Detection alone is not activation.
+3. For a new task, run `python3 scripts/new-task.py --title "<title>"` from the repository root, or create a slugged folder in `.flow/tasks/` and copy all task templates into it.
 4. Read `state.yaml`, then announce the current stage and the next concrete action.
 5. Update the relevant artifact and `state.yaml` before leaving a stage. Do not mark a gate complete without its written result.
 
@@ -37,8 +37,8 @@ Select one owner for each gate. Do not run equivalent gates from several framewo
 
 Apply these routing rules:
 
-- OpenSpec is optional and limited to task/spec ownership. In Codex it is normally exposed as active `openspec-*` skills; other hosts may expose `/opsx:*` commands. Use only the exact surface visible in the current session. Keep CE as implementation-plan owner, summarize the accepted OpenSpec change in `.flow/tasks/<slug>/task.md`, and record the OpenSpec change name so it can be reconciled at close.
-- gstack owns selected product, architecture, design, and browser-QA gates. Use active `office-hours`, `plan-ceo-review`, `plan-eng-review`, and `plan-design-review` skills when their gate is selected. For web QA, use `qa-only` for validation/reporting and use `qa` only when the user requested the test-fix-verify loop and its clean-tree and commit behavior is authorized.
+- OpenSpec is optional and limited to task/spec ownership. In Codex it is normally exposed as active `openspec-*` skills; other hosts may expose `/opsx:*` commands. Use only the exact surface visible in the current session. Keep CE as implementation-plan owner, summarize the accepted OpenSpec change in `.flow/tasks/<slug>/task.md`, and record the OpenSpec change name so it can be reconciled at close. OpenSpec actions are fluid rather than mandatory phases: use `update` when implementation changes the plan, and select `verify` or `sync` only when useful for the chosen change.
+- gstack owns selected product, architecture, design, and QA gates. Use active `office-hours`, `plan-ceo-review`, `plan-eng-review`, and `plan-design-review` skills when their gate is selected. Use `qa-only` to validate and report on web, CLI, API, or other software behavior without changing product code or tests. Use `qa` for a test-fix-verify loop only when the user requested fixes and authorized its source changes, clean-tree handling, and commit behavior.
 - Compound Engineering (CE) is the main execution loop. Use active `ce-ideate` only for idea generation, `ce-brainstorm` for requirements, `ce-plan` for the executable plan, `ce-work` for implementation, `ce-code-review` or `ce-doc-review` for review, and `ce-compound` for knowledge capture. `ce-polish` is an explicit, user-directed browser feedback loop, not an automatic gate.
 - OMX is an optional parallel runtime, not the lifecycle owner. Do not replace Personal Flow with OMX autopilot, Ralph, or another fixed chain. When independent workstreams justify it, use an active `$team`-style skill or present an exact task-specific worktree launch such as `omx --worktree=<name> --madmax --xhigh`. Launch only after explicit approval and only on a supported, verified runtime.
 
@@ -48,7 +48,7 @@ Detection means a framework is installed locally; it does not prove that its ski
 
 ### Task
 
-Use the personal task template by default. When OpenSpec is selected, use its active explore surface for read-only clarification and its active propose surface for a durable change specification. Then fill `task.md` with the OpenSpec change name, goal, non-goals, acceptance criteria, constraints, and profile. Keep requirements testable.
+Use the personal task template by default. When OpenSpec is selected, use its active explore surface for read-only clarification and its active propose surface for a durable change specification. Then fill `task.md` with the OpenSpec change name, goal, non-goals, acceptance criteria, constraints, and profile. Keep requirements testable. OpenSpec actions do not have to follow Personal Flow stage boundaries; update its planning artifacts when implementation reveals a material change, and use optional verify/sync actions when the change and active version support them.
 
 ### Discover and Brainstorm
 
@@ -72,7 +72,7 @@ Offer `ce-polish` only for a working browser feature that needs user-directed UX
 
 ### QA
 
-Default to validation without code changes. For web applications, use active `qa-only` when the request is to test, verify, or report; use active `qa` only when the user has authorized its source fixes, clean-tree handling, and atomic commits. For non-web work, run equivalent repository-appropriate validation directly. Record exact commands, manual scenarios, observed results, fixes, and remaining limits in `qa.md`. A passing build alone is not sufficient unless it is the only acceptance criterion.
+Default to validation without code changes. For web applications and non-web software such as CLIs or APIs, use active gstack `qa-only` for test, verification, or report requests when available; it may gather evidence and recommend regression cases but must not change product code or tests. Otherwise run equivalent repository-appropriate validation directly. Use active gstack `qa` only for a user-requested test-fix-verify loop when source fixes, clean-tree handling, and atomic commits are authorized. Record exact commands, manual scenarios, observed results, fixes, and remaining limits in `qa.md`. A passing build alone is not sufficient unless it is the only acceptance criterion.
 
 ### Close
 
@@ -84,5 +84,5 @@ If OpenSpec was selected, reconcile the implementation with its artifacts using 
 - Read `references/sources.md` when checking upstream documentation, versions, renamed skills, or updating this workflow.
 - Read `references/practical-operations-checklist.md` when drafting a repo-backed work prompt, defining completion evidence, or standardizing an implementation handoff. It is operating guidance, not an additional lifecycle gate.
 - Copy `assets/templates/` for a new `.flow` installation or task.
-- Use `scripts/new-task.ps1` to create a task folder and initialize its state.
-- Use `scripts/probe-frameworks.ps1` to detect local OpenSpec, gstack, CE, and OMX versions and availability without changing the environment.
+- Use `python3 scripts/new-task.py --title "<title>"` to create a task folder and initialize its state.
+- Use `python3 scripts/probe-frameworks.py <repo>` to detect local OpenSpec, gstack, CE, and OMX versions and availability without changing the environment.

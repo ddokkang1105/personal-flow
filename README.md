@@ -71,7 +71,13 @@ small 프로필로 계획 → 작성 → 문서 리뷰 → 검증 → 종료까�
 └─ knowledge/
 ```
 
-PowerShell에서 작업 폴더만 직접 만들 수도 있습니다.
+작업 폴더만 직접 만들 수도 있습니다. macOS/Linux에서는 스킬 디렉터리에서 Python 스크립트를 실행합니다.
+
+```bash
+python3 scripts/new-task.py --title "로그인 오류 수정" --profile small --root /path/to/repo/.flow
+```
+
+PowerShell에서는 다음 명령을 사용합니다.
 
 ```powershell
 & "$HOME\.agents\skills\personal-flow\scripts\new-task.ps1" `
@@ -93,7 +99,13 @@ PowerShell에서 작업 폴더만 직접 만들 수도 있습니다.
 
 설치 여부 확인은 권한이나 실행 승인을 의미하지 않습니다. 사용할 수 없는 프레임워크는 직접 수행 방식으로 대체하고 그 사실을 작업 기록에 남깁니다.
 
-환경 탐지:
+환경 탐지(macOS/Linux):
+
+```bash
+python3 scripts/probe-frameworks.py /path/to/repo
+```
+
+환경 탐지(Windows PowerShell):
 
 ```powershell
 & "$HOME\.agents\skills\personal-flow\scripts\probe-frameworks.ps1" `
@@ -118,9 +130,12 @@ SKILL.md                 핵심 워크플로와 단계별 규칙
 agents/openai.yaml       Codex UI 메타데이터
 assets/templates/        프로젝트별 `.flow` 작업 템플릿
 references/              프레임워크 라우팅, 운영 체크리스트, 출처
-scripts/new-task.ps1     새 작업 문서 초기화
+scripts/new-task.py      새 작업 문서 초기화(macOS/Linux)
+scripts/new-task.ps1     새 작업 문서 초기화(Windows)
+scripts/probe-frameworks.py
+                         설치된 외부 프레임워크 탐지(macOS/Linux)
 scripts/probe-frameworks.ps1
-                         설치된 외부 프레임워크 탐지
+                         설치된 외부 프레임워크 탐지(Windows)
 ```
 
 세부 운영 기준은 [실무 운영 및 프롬프트 체크리스트](references/practical-operations-checklist.md), 프레임워크 선택 기준은 [Framework Routing](references/framework-routing.md), 조사 출처와 갱신 규칙은 [Source Registry](references/sources.md)에서 확인할 수 있습니다.
@@ -132,4 +147,4 @@ scripts/probe-frameworks.ps1
 - 버전·모델·reasoning effort·기능 플래그는 현재 환경에서 제공되는 값만 사용합니다.
 - 문서와 스크립트가 충돌하면 `SKILL.md`의 현재 규칙과 프로젝트에 적용되는 `AGENTS.md`를 우선합니다.
 
-현재 보조 스크립트는 PowerShell 기반이며 Windows 환경에서 검증되었습니다.
+보조 스크립트는 macOS/Linux용 Python과 Windows용 PowerShell 구현을 제공합니다.
